@@ -1,0 +1,11 @@
+# logLocations.txt - host, path, and name of all log files of interest
+
+# File names can contain dates in the form of 'YYYY', 'MM', and 'DD'.
+# If the file name contains any of the following strings then they will be
+# replaced with today's current date.
+
+# host_name, file_path, file_name
+# examples:
+# webserver, C:\tomcat\log\, localhost.log, keyword0:keyword1:keyword2
+# webserver, C:\tomcat\log\, catalina.YYYY-MM-DD.log
+
