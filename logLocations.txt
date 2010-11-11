@@ -8,4 +8,3 @@
 # examples:
 # webserver, C:\tomcat\log\, localhost.log, keyword0:keyword1:keyword2
 # webserver, C:\tomcat\log\, catalina.YYYY-MM-DD.log
-
