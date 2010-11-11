@@ -1,0 +1,22 @@
+LogEmailer v1.0.0
+
+LogEmailer is protected by GNU General Public License for more information please refer to LICENSE.txt.
+
+Windows Installation\Running:
+1.  Download LogEmailer from https://github.com/jbb005/LogEmailer
+2.  You must have at least JRE (Java Runtime Environment) on your system, this can be found at: http://www.oracle.com/technetwork/java/index.html
+3.  You must set the PATH system variable for JRE this can be found at: http://www.java.com/en/download/help/path.xml
+4.  Edit database.properties and logLocations.txt to desired settings.
+5.  Open command prompt change to LogEmailer directory
+6.  Enter command java -jar dis\LogEmailer to execute.
+
+Mac Installation/Running:
+1.  Download LogEmailer from https://github.com/jbb005/LogEmailer
+2.  You must have at least JRE (Java Runtime Environment) on your system, this can be found at: http://www.oracle.com/technetwork/java/index.html
+3.  Edit database.properties and logLocations.txt to desired settings.
+4.  Open command prompt change to LogEmailer directory
+5.  Enter command java -jar dis\LogEmailer to execute.
+
+Copyright (C) 2010  Jason Bryan
+To submit any and all issues or problems go to: https://github.com/jbb005/LogEmailer/issues
+Message me for any questions or concerns about LogEmailer at: https://github.com/jbb005
