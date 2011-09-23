@@ -37,35 +37,40 @@ public class LogFile {
     private String path;
     private String name;
     private ArrayList<String> keywords;
-    private boolean exists = false;
+    private boolean exists;
 
 
     /**
      * Default Constructor
      * @throws Exception
      */
-    public LogFile() throws Exception{
+    public LogFile() throws Exception {
+        contents = null;
         hostName = "";
         path = "";
         name = "";
         keywords = new ArrayList<String>();
+        exists = false;
      }
 
 
      /**
-      * Constructor
-      * @param logLocation
+      * Constructor - Creates a LogFile object based on the data extracted from the input string
+      * @param logLocationLine - line from the logLocation file. contains information to locate the wanted log file
       * @throws Exception
       */
-    public LogFile(String logLocationLine) throws Exception{
+    public LogFile(String logLocationLine) throws Exception {
+        contents = null;
         hostName = "";
         path = "";
         name = "";
         keywords = new ArrayList<String>();
+        exists = false;
 
         /* Parses the logLocationLine into logFile info */
-        parseLine(logLocationLine);
+        parseLogLocationData(logLocationLine);
 
+        /* remove YYYY, MM, DD with current values */
         name = convertDateHolders(name);
 
         retrieveLogFile();
@@ -104,11 +109,10 @@ public class LogFile {
             }
 
             return keywordResults;
-            }
-            else{
-                return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File Not Found! <br />";
-            }
+        } else {
+            return "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;File Not Found! <br />";
         }
+    }
 
 
     /*
@@ -117,27 +121,31 @@ public class LogFile {
 
 
     /**
-     * Divides the logLocationsLine into different variables
-     * @param logLocation
+     * extracts the hostname, path, file name, and search terms from the string 
+     * @param logLocation - string that contains the hostname, path, file name, and search terms from the config file.
      */
-    private void parseLine(String logLocation){
+    private void parseLogLocationData(String logLocation) {
          StringTokenizer logTokens = new StringTokenizer(logLocation, ",");
 
+         /* host name */
          if (logTokens.hasMoreTokens()) {
              hostName = logTokens.nextToken();
              hostName = hostName.replace(" ", "");
          }
 
+         /* file path */
          if (logTokens.hasMoreTokens()) {
              path = logTokens.nextToken();
              path = path.replace(" ", "");
          }
 
+         /* file name */
          if (logTokens.hasMoreTokens()) {
              name = logTokens.nextToken();
              name = name.replace(" ", "");
          }
 
+         /* search terms */
          if (logTokens.hasMoreTokens()) {
              String words = logTokens.nextToken();
              words = words.replace(" ", "");
@@ -152,24 +160,24 @@ public class LogFile {
 
 
     /**
-     * Retrieves Log File
+     * Retrieves Log File.  sets exists to true if the file exists and false if not.
      * @throws Exception
      */
-    private void retrieveLogFile() throws Exception{
+    private void retrieveLogFile() throws Exception {
         File file = new File(path.replaceAll("\\\\", "\\\\\\\\") + name);
-        if(file.exists()){
+        if (file.exists()){
             contents = file;
             setExists(true);
-        }
-        else{
+        } else {
             setExists(false);
         }
     }
+    
 
     /**
-     * replace holder values
-     * @param holder
-     * @return
+     * replace date holder values to current values
+     * @param holder - date as string with potential holder values
+     * @return the date as a string with the holders replaced with the corresponding current date
      */
     private String convertDateHolders(String holder) {
         Calendar today = Calendar.getInstance();

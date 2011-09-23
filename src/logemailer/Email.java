@@ -47,7 +47,6 @@ import javax.mail.internet.MimeMultipart;
  */
 public class Email  {
 
-    /* Global Variables */
     private String smtpHostName;
     private String smtpAuthUser;
     private String smtpAuthPass;
@@ -70,25 +69,26 @@ public class Email  {
         from = "";
         subject = "";
         body = "";
+        recipients = null;
         logFiles = new ArrayList<LogFile>();
     }
 
 
     /**
-     * Constructor
-     * @param contents
-     * @param subject
+     * Constructor - creates email object with the arraylist of logfiles as attachments
+     * @param logFiles - arraylist of logfiles to add as attachments to the email
+     * @throws Exception 
      */
     public Email(ArrayList<LogFile> logFiles) throws Exception {
         this.smtpHostName = "";
         this.smtpAuthUser = "";
         this.smtpAuthPass = "";
 
-        this.logFiles = logFiles;
-
         this.from = "";
         this.subject = createSubject();
         this.body = createBody();
+        this.recipients = null;
+        this.logFiles = logFiles;
     }
 
 
@@ -130,7 +130,7 @@ public class Email  {
         /* Established email to be sent to all recipents in mailList */
         InternetAddress[] addressTo = new InternetAddress[recipients.length];
 
-        for (int i = 0; i < recipients.length; ++i){
+        for (int i = 0; i < recipients.length; ++i) {
             addressTo[i] = new InternetAddress(recipients[i]);
         }
         msg.setRecipients(Message.RecipientType.TO, addressTo);
@@ -148,8 +148,8 @@ public class Email  {
         multipart.addBodyPart(messageBodyPart);
 
         /* Adds all Log File attachment parts */
-        for(int i = 0; i < logFiles.size(); ++i){
-           if(logFiles.get(i).isExists() == true){
+        for (int i = 0; i < logFiles.size(); ++i) {
+           if (logFiles.get(i).isExists() == true) {
                 messageBodyPart = new MimeBodyPart();
                 DataSource source = new FileDataSource(logFiles.get(i).getContents());
                 messageBodyPart.setDataHandler(new DataHandler(source));
@@ -157,6 +157,7 @@ public class Email  {
                 multipart.addBodyPart(messageBodyPart);
            }
         }
+        
         /* Put parts in message */
         msg.setContent(multipart);
         Transport.send(msg);
@@ -173,7 +174,7 @@ public class Email  {
 
     /**
      * create the subject for the email
-     * @return
+     * @return the subject as a string
      */
     private String createSubject() {
         LogFile file = logFiles.get(0);
@@ -184,7 +185,7 @@ public class Email  {
 
     /**
      * create the body of the email.  list of log files attached and date
-     * @return
+     * @return the body as a string
      */
     private String createBody() throws Exception {
         Calendar today = Calendar.getInstance();
@@ -192,11 +193,14 @@ public class Email  {
         String date = today.get(Calendar.YEAR) + "." +
                       (today.get(Calendar.MONTH) + 1) + "." +
                       today.get(Calendar.DAY_OF_MONTH);
+        
         String hostName = logFiles.get(0).getHostName();
 
+        /* main text */
         body = "The log files for " + date + " on host <strong>" + hostName + "</strong> are attached.<br /><br />";
         body += "Attached files include:<br />";
 
+        /* list of attached log files */
         for (int i = 0; i < logFiles.size(); ++i) {
             LogFile file = logFiles.get(i);
             body += "<strong>" + file.getName() + "</strong><br />";
