@@ -47,9 +47,9 @@ public class Main {
                 logFiles.add( new LogFile(logLocation) );
             }
         }
-
+        
         /* Sends contents of LogFiles to recipients in mailingList */
-        Email mailSender = new Email(logFiles);
+        Email mailSender = new Email(logFiles);        
         mailSender.postMail();
     }
 
