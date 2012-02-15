@@ -130,19 +130,19 @@ public class LogFile {
          /* host name */
          if (logTokens.hasMoreTokens()) {
              hostName = logTokens.nextToken();
-             hostName = hostName.replace(" ", "");
+             hostName = Utility.removeFrontAndBackSpaces(hostName);
          }
 
          /* file path */
          if (logTokens.hasMoreTokens()) {
              path = logTokens.nextToken();
-             path = path.replace(" ", "");
+             path = Utility.removeFrontAndBackSpaces(path);
          }
 
          /* file name */
          if (logTokens.hasMoreTokens()) {
              name = logTokens.nextToken();
-             name = name.replace(" ", "");
+             name = Utility.removeFrontAndBackSpaces(name);
          }
 
          /* search terms */
@@ -165,6 +165,7 @@ public class LogFile {
      */
     private void retrieveLogFile() throws Exception {
         File file = new File(path.replaceAll("\\\\", "\\\\\\\\") + name);
+
         if (file.exists()){
             contents = file;
             setExists(true);
@@ -183,13 +184,13 @@ public class LogFile {
         Calendar today = Calendar.getInstance();
 
         holder = holder.replace("YYYY", String.valueOf(today.get(Calendar.YEAR)));
-        holder = holder.replace("MM", String.valueOf(today.get(Calendar.MONTH) + 1));
-        holder = holder.replace("DD", String.valueOf(today.get(Calendar.DAY_OF_MONTH)));
+        holder = holder.replace("MM", Utility.appendZeroOnSingles(today.get(Calendar.MONTH) + 1));
+        holder = holder.replace("DD", Utility.appendZeroOnSingles(today.get(Calendar.DAY_OF_MONTH)));
 
         return holder;
-    }
-
-
+    }   
+    
+    
     /*
      * ------ GETTERS AND SETTERS -----
      */

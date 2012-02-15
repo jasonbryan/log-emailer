@@ -50,7 +50,8 @@ public class Email  {
     private String smtpHostName;
     private String smtpAuthUser;
     private String smtpAuthPass;
-
+    private String smtpAuthRequired;
+    
     private String from;
     private String subject;
     private String body;
@@ -84,11 +85,12 @@ public class Email  {
         this.smtpAuthUser = "";
         this.smtpAuthPass = "";
 
+        this.logFiles = logFiles;
+        
         this.from = "";
         this.subject = createSubject();
         this.body = createBody();
-        this.recipients = null;
-        this.logFiles = logFiles;
+        this.recipients = null;        
     }
 
 
@@ -109,10 +111,12 @@ public class Email  {
         BufferedReader br = new BufferedReader(new FileReader(file));
         Properties props = new Properties();
         props.load(br);
+        
         smtpHostName = props.getProperty("mail.smtp.host");
         smtpAuthUser = props.getProperty("mail.smtp.user");
+        smtpAuthRequired = props.getProperty("mail.smtp.auth");
         smtpAuthPass = props.getProperty("mail.smtp.pass");
-
+        
         from = props.getProperty("mail.smtp.user");
         recipients = props.getProperty("mailList").split(",");
 
@@ -191,8 +195,8 @@ public class Email  {
         Calendar today = Calendar.getInstance();
 
         String date = today.get(Calendar.YEAR) + "." +
-                      (today.get(Calendar.MONTH) + 1) + "." +
-                      today.get(Calendar.DAY_OF_MONTH);
+                      Utility.appendZeroOnSingles(today.get(Calendar.MONTH) + 1) + "." +
+                      Utility.appendZeroOnSingles(today.get(Calendar.DAY_OF_MONTH));
         
         String hostName = logFiles.get(0).getHostName();
 
@@ -233,5 +237,5 @@ public class Email  {
         }
 
     }
+    
 }
-
